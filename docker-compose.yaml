@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres
+    container_name: maideasy_db
+    restart: always
+    ports:
+      - "54432:5432"
+    volumes:
+    - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: maideasy_db
+
+  maid-easy-service:
+    image: hmdc90/maid-easy:version_1.1
+    ports:
+      - "8080:8080"
+    links:
+      - postgres
+
+  maid-easy-service-ui:
+    image: hmdc90/maid-easy-ui:version_1.0
+    ports:
+      - "3001:3000"
+    links:
+      - maid-easy-service
+
+volumes:
+  db_data:
